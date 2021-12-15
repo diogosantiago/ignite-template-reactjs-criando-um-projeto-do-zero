@@ -4,4 +4,23 @@
   padding: 0;
 }
 
-// TODO
+:root {
+  --background: #1a1d23;
+  --body: #d7d7d7;
+  --heading: #f8f8f8;
+  --highlight: #ff57b2;
+  --info: #bbbbbb;
+}
+
+body {
+  background: var(--background);
+}
+
+* {
+  color: var(--body);
+  font-family: Inter, sans-serif;
+}
+
+a {
+  text-decoration: transparent;
+}

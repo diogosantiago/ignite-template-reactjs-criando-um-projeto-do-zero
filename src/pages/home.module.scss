@@ -1,1 +1,53 @@
-// TODO
+.container {
+    padding-top: 80px;
+    padding-left: 370px;
+    main{
+        padding-top: 30px;
+        max-width: 700px;
+
+        > div {
+            padding-top: 40px;
+        }
+
+        > button {
+            padding-top: 40px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--highlight);
+            background: transparent;
+            border: 0;
+            cursor: pointer;
+        }
+    }
+}
+
+.title {
+    font-size: 28px;
+    font-weight: bold;
+    color: var(--heading);
+}
+
+.subtitle {
+    font-size: 18px;
+    padding-top: 5px;
+}
+
+.info {
+    padding-top: 5px;
+
+    span {
+        font-size: 14px;
+        color: var(--info);
+        padding-left: 10px;
+
+        svg {
+            width: 40px;
+        }
+    }
+}
+
+.outPreview{
+    width: 100%;
+    color: var(--background);
+    height: 58px;
+}
