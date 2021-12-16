@@ -16,6 +16,29 @@
             }
         }
     }
+
+    footer{
+        max-width: 700px;
+        padding-top: 40px;
+        height: 538;
+        > div {
+            display: flex;
+            justify-content: space-between;
+            > div {
+                display: flex;
+                flex-direction: column;
+                a {
+                    font-weight: 600;
+                    font-size: 16px;
+                    color: var(--highlight);
+                }
+                span {
+                    font-size: 18px;
+                    color: var(--heading);
+                }
+            }
+        }
+    }
 }
 
 .banner {
@@ -51,4 +74,10 @@
     padding-top: 5px;
     font-size: 14px;
     font-style: italic;
+}
+
+.outPreview{
+    width: 100%;
+    color: var(--background);
+    height: 58px;
 }

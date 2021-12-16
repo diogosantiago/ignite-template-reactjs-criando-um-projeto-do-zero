@@ -13,7 +13,9 @@ import commonStyles from '../../styles/common.module.scss';
 import styles from './post.module.scss';
 
 interface Post {
+  uid: string;
   first_publication_date: string | null;
+  last_publication_date: string | null;
   data: {
     title: string;
     banner: {
@@ -32,9 +34,15 @@ interface Post {
 
 interface PostProps {
   post: Post;
+  before: Post;
+  next: Post;
 }
 
-export default function Post({ post }: PostProps): JSX.Element {
+export default function Post({
+  post,
+  before,
+  next,
+}: PostProps): JSX.Element {
   const router = useRouter();
   if (router.isFallback) {
     return <div>Carregando...</div>;
@@ -91,7 +99,7 @@ export default function Post({ post }: PostProps): JSX.Element {
         </p>
         <time className={styles.edited}>
           {format(
-            new Date(post.first_publication_date),
+            new Date(post.last_publication_date),
             "'* editado em' dd MMM yyyy', às 'HH:ii",
             {
               locale: ptBR,
@@ -115,6 +123,47 @@ export default function Post({ post }: PostProps): JSX.Element {
             );
           })}
       </main>
+      <footer>
+        <div>
+          {before && (
+            <div>
+              <span>{before.data.title}</span>
+              <a href={`/post/${before.uid}`}>Post Anterior</a>
+            </div>
+          )}
+          {next && (
+            <div>
+              <span>{next.data.title}</span>
+              <a href={`/post/${next.uid}`}>Próximo post</a>
+            </div>
+          )}
+        </div>
+        <section
+          style={{ width: '100%' }}
+          ref={element => {
+            if (!element) {
+              return;
+            }
+
+            const scriptElement = document.createElement('script');
+            scriptElement.setAttribute('src', 'https://utteranc.es/client.js');
+            scriptElement.setAttribute(
+              'repo',
+              'diogosantiago/ignite-template-reactjs-criando-um-projeto-do-zero'
+            );
+            scriptElement.setAttribute('issue-term', 'pathname');
+            scriptElement.setAttribute('theme', 'github-dark');
+            scriptElement.setAttribute('crossorigin', 'anonymous');
+            scriptElement.setAttribute('async', 'true');
+            element.replaceChildren(scriptElement);
+          }}
+        />
+        <div>
+          <button className={styles.outPreview} type="button">
+            Sair do modo Preview
+          </button>
+        </div>
+      </footer>
     </div>
   );
 }
@@ -128,6 +177,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
       pageSize: 2,
     }
   );
+
   const paths = posts.results.map(post => ({ params: { slug: post.uid } }));
 
   return {
@@ -141,9 +191,33 @@ export const getStaticProps: GetStaticProps = async context => {
   const prismic = getPrismicClient();
   const response = await prismic.getByUID('posts', slug, {});
 
+  const postsResponse = await prismic.query(
+    [Prismic.predicates.at('document.type', 'posts')],
+    {
+      orderings: '[document.last_publication_date]',
+      fetch: ['post.title'],
+    }
+  );
+  let before = null;
+  let next = null;
+  let now = false;
+  postsResponse.results.forEach(element => {
+    if (element.uid !== response.uid && now === false) {
+      before = element;
+    }
+    if (element.uid !== response.uid && now === true) {
+      next = element;
+    }
+    if (element.uid === response.uid) {
+      now = true;
+    }
+  });
+
   return {
     props: {
       post: response,
+      before,
+      next,
     },
   };
 };

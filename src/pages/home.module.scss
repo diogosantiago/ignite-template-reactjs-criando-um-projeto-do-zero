@@ -18,6 +18,18 @@
             border: 0;
             cursor: pointer;
         }
+        aside {
+            width: 100%;
+            background: var(--body);
+            height: 58px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            a {
+                color: var(--background);
+            }
+        }
     }
 }
 
@@ -44,10 +56,4 @@
             width: 40px;
         }
     }
-}
-
-.outPreview{
-    width: 100%;
-    color: var(--background);
-    height: 58px;
 }
